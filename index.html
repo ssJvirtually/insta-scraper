@@ -12,35 +12,37 @@
 
   <script>
     async function scrapeInstagramPost() {
-      const urlOrShortcode = document.getElementById('instagramUrl').value.trim();
+  const urlOrShortcode = document.getElementById('instagramUrl').value.trim();
+  let shortcode = urlOrShortcode;
 
-      // Extract shortcode from URL if provided
-      let shortcode = urlOrShortcode;
-      if (urlOrShortcode.includes('http')) {
-        const parts = urlOrShortcode.split('/p/');
-        shortcode = parts[parts.length - 1].split('/')[0];
-      }
+  if (urlOrShortcode.includes('http')) {
+    const parts = urlOrShortcode.split('/p/');
+    shortcode = parts[parts.length - 1].split('/')[0];
+  }
 
-      console.log(`Scraping Instagram post: ${shortcode}`);
+  console.log(`Scraping Instagram post: ${shortcode}`);
 
-      const variables = {
-        "shortcode": shortcode,
-        "child_comment_count": 20,
-        "fetch_comment_count": 100,
-        "parent_comment_count": 24,
-        "has_threaded_comments": true
-      };
+  const variables = {
+    "shortcode": shortcode,
+    "child_comment_count": 20,
+    "fetch_comment_count": 100,
+    "parent_comment_count": 24,
+    "has_threaded_comments": true
+  };
 
-      const queryParams = new URLSearchParams({ query_hash: "b3055c01b4b222b8a47dc12b090e4e64", variables: JSON.stringify(variables) });
-      const response = await fetch(`https://www.instagram.com/graphql/query/?${queryParams}`, {
-        headers: {
-          'x-ig-app-id': '936619743392459' // Instagram App ID
-        }
-      });
+  const queryParams = new URLSearchParams({ query_hash: "b3055c01b4b222b8a47dc12b090e4e64", variables: JSON.stringify(variables) });
+  const response = await fetch(`https://www.instagram.com/graphql/query/?${queryParams}`, {
+    headers: {
+      'x-ig-app-id': '936619743392459' // Instagram App ID
+    },
+    mode: 'no-cors'
+  });
 
-      const responseData = await response.json();
-      document.getElementById('output').textContent = JSON.stringify(responseData, null, 2);
-    }
+  // Since the response is opaque, you can't access its body directly
+  // You may need to adjust your approach depending on your requirements
+  console.log(response);
+}
+
   </script>
 </body>
 </html>
